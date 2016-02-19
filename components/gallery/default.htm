@@ -1,0 +1,41 @@
+<div id="container_gallery" class="container">
+    <h1> Gallery </h1>
+    <div class="panel panel-default">
+      <div class="panel-body">
+        <button type="button" class="btn btn-default" data-request="{{__SELF__}}::onRun" data-request-redirect="/gallery" {# data-request-success="updateGallery();"  data-request-update="'{{__SELF__}}::default': '#container_gallery'" #} data-request-data="ministry_id:0">ALL</button>
+        {% for ministry in ministries %}
+            <button type="button" class="btn {% if filter_by == ministry.id %} btn-primary {% else %} btn-default {% endif %}" data-request="{{__SELF__}}::onRun" data-request-redirect="/gallery" {# data-request-success="updateGallery();"  data-request-update="'{{__SELF__}}::default': '#container_gallery'" #} data-request-data="ministry_id: {{ministry.id}}, slug: 0">{{ministry.name}}</button>
+        {% endfor %}
+        </div>
+    </div>
+    <div class="panel panel-default">
+      <div class="panel-body">
+        {% for photo in photos %}
+            <div style="display:block; float:left; margin:10px;">
+                <a class="gallery" href="{{ photo.path }}">
+                    <img src="{{ photo.getThumb(250, 250, 'crop') }}"/>
+                    <div>{{photo.title}}</div>
+                </a>
+                <div>{{photo.description}}</div>
+                <h3><a href="{{ ministryPage|page({ slug: __SELF__.getMinistry(photo.attachment_id).slug }) }}" >{{ __SELF__.getMinistry(photo.attachment_id).name }}</a></h3>
+            </div>
+        {% endfor %}
+        </div>
+    </div>
+{{ photos.render|raw }}
+{% put scripts %}
+    <script>
+        $( document ).ready(function() {
+            updateGallery();
+        });
+        function updateGallery(){
+            $('a.gallery').featherlightGallery({
+                previousIcon: '«',
+                nextIcon: '»',
+                galleryFadeIn: 300,
+                openSpeed: 300
+            });
+        }
+    </script>
+{% endput %}
+</div>

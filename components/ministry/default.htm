@@ -1,0 +1,41 @@
+<div class="container">
+<h1>{{ ministry.name }}</h1>
+Give a short description for this ministry : {{ ministry.shortDescription }}
+{% if ministry.photos|length > 0 %}
+<div class="panel panel-default">
+  <div class="panel-heading">Gallery</div>
+  <div class="panel-body">
+    {% for photo in ministry.photos %}
+        <div style="display:block; float:left; margin:10px;">
+            <a class="gallery" href="{{ photo.path }}">
+                <img src="{{ photo.getThumb(250, 250, 'crop') }}"/>
+                <div>{{photo.title}}</div>
+            </a>
+            <div>{{photo.description}}</div>
+        </div>
+    {% endfor %}
+    </div>
+</div>
+
+{% put styles %}
+    <link href="/plugins/sitesforchurch/ministries/assets/css/featherlight.min.css" rel="stylesheet" />
+    <link href="/plugins/sitesforchurch/ministries/assets/css/featherlight.gallery.min.css" rel="stylesheet" />
+{% endput %}
+
+{% put scripts %}
+    <script type="text/javascript" src="/plugins/sitesforchurch/ministries/assets/js/featherlight.min.js"></script>
+    <script type="text/javascript" src="/plugins/sitesforchurch/ministries/assets/js/featherlight.gallery.min.js"></script>
+    <script>
+        $('a.gallery').featherlightGallery({
+            previousIcon: '«',
+            nextIcon: '»',
+            galleryFadeIn: 300,
+            openSpeed: 300
+        });
+    </script>
+{% endput %}
+
+{% else %}
+    <div class="alert alert-danger" role="alert">No photos</div>
+{% endif %}
+</div>
